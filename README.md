@@ -1,6 +1,8 @@
 # vue-twitch-player [![license](https://img.shields.io/github/license/tserkov/vue-twitch-player.svg)]()
 A Vue component for embedding a Twitch player. See component for all available properties.
 
+[Vue-plugin-load-script](https://github.com/tserkov/vue-plugin-load-script) is a dependency, since the Twitch Player API needs to be included from Twitch's servers.
+
 ## Install
 
 ``` bash
@@ -14,6 +16,13 @@ yarn add --dev vue-twitch-player
 ```
 
 ## Use
+
+```javascript
+  // In main.js
+  import LoadScript from 'vue-plugin-load-script';
+
+  Vue.use(LoadScript);
+```
 
 ```html
 <template>
