@@ -4,6 +4,9 @@
 
 <script>
   import Vue from 'vue';
+  import LoadScript from 'vue-plugin-load-script';
+
+  Vue.use(LoadScript);
 
   let player;
 
@@ -66,7 +69,6 @@
           player.addEventListener('online', () => (this.$emit('online')));
 
           player.addEventListener('ready', () => {
-            console.log('ready'); // eslint-disable-line
             player.setQuality(this.initialQuality);
             player.setVolume(this.initialVolume);
           });
