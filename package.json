@@ -7,6 +7,6 @@
   "author": "tserkov <james.churchard@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "vue-plugin-load-script": "1.0.0"
+    "vue-plugin-load-script": "^1.0.1"
   }
 }
