@@ -71,6 +71,8 @@
           player.addEventListener('ready', () => {
             player.setQuality(this.initialQuality);
             player.setVolume(this.initialVolume);
+
+            this.$emit('ready');
           });
         }).catch((e) => (this.$emit('error', e)));
     },

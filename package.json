@@ -1,6 +1,6 @@
 {
   "name": "vue-twitch-player",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "A Vue component for embedding a Twitch player",
   "main": "dist/TwitchPlayer.js",
   "repository": "https://github.com/tserkov/vue-twitch-player",
