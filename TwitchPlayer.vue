@@ -21,13 +21,17 @@
         type: String,
         default: '300',
       },
-      initialVolume: {
+      volume: {
         type: Number,
         default: 0.5,
       },
-      initialQuality: {
+      quality: {
         type: String,
         default: 'medium',
+      },
+      playsInline: { // If true, the embedded player plays inline for mobile iOS apps.
+        type: Boolean,
+        default: false,
       },
       channel: String,
       collection: String,
@@ -44,6 +48,7 @@
           const options = {
             width: this.width,
             height: this.height,
+            playsinline: this.playsInline,
           };
 
           if (this.channel) {
@@ -53,10 +58,10 @@
           } else if (this.video) {
             options.video = this.video;
           } else {
-            // Error: No specified source!
+            this.$emit('error', 'no source specified');
           }
 
-          player = new window.Twitch.Player(this.playerId, options); // eslint-disable-line no-underscore-dangle, max-len
+          player = new window.Twitch.Player(this.playerId, options);
 
           player.addEventListener('ended', () => (this.$emit('ended')));
 
@@ -69,33 +74,51 @@
           player.addEventListener('online', () => (this.$emit('online')));
 
           player.addEventListener('ready', () => {
-            player.setQuality(this.initialQuality);
-            player.setVolume(this.initialVolume);
+            player.setQuality(this.quality);
+            player.setVolume(this.volume);
 
             this.$emit('ready');
           });
         }).catch((e) => (this.$emit('error', e)));
     },
     methods: {
-      play() {
+      play() { // Begins playing the specified video.
         player.play();
       },
-      pause() {
+      pause() { // Pauses the player.
         player.pause();
       },
-      seek(timestamp) {
+      seek(timestamp) { // Seeks to the specified timestamp (in seconds) in the video and resumes playing if paused. Does not work for live streams.
         player.seek(timestamp);
       },
-      getVolume() {
+      getCurrentTime() { // Returns the current video’s timestamp, in seconds. Works only for VODs, not live streams.
+        return player.getCurrentTime();
+      },
+      getDuration() { // Returns the duration of the video, in seconds. Works only for VODs,not live streams.
+        return player.getDuration();
+      },
+      getPlaybackStats() { // Returns an object with statistics the embedded video player and the current live stream or VOD.
+        return player.getPlaybackStats();
+      },
+      getQuality() { // Returns the current quality of video playback.
+        return player.getQualitity();
+      },
+      isPaused() { // Returns true if the video is paused; otherwise, false. Buffering or seeking is considered playing.
+        return player.isPause();
+      },
+      hasEnded() { // Returns true if the live stream or VOD has ended; otherwise, false.
+        return player.getEnded();
+      },
+      getVolume() { // Returns the volume level, a value between 0.0 and 1.0.
         return player.getVolume();
       },
-      isMuted() {
+      isMuted() { // Returns true if the player is muted; otherwise, false.
         return player.getMuted();
       },
-      mute() {
+      mute() { // Mutes the player.
         player.setMuted(true);
       },
-      unmute() {
+      unmute() { // Unmutes the player.
         player.setMuted(false);
       },
     },
