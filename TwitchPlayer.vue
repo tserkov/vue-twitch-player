@@ -1,5 +1,5 @@
 <template>
-  <div :id="playerId"></div>
+  <div ref="player"></div>
 </template>
 
 <script>
@@ -37,19 +37,17 @@
       collection: String,
       video: String,
     },
-    data() {
-      return {
-        playerId: `twitch-player-${this._uid}`, // eslint-disable-line no-underscore-dangle
-      };
-    },
     beforeCreate() {
       Vue.loadScript('//player.twitch.tv/js/embed/v1.js')
         .then(() => {
           const options = {
             width: this.width,
             height: this.height,
-            playsinline: this.playsInline,
           };
+
+          if (this.playsInline) {
+            options.playsinline = true;
+          }
 
           if (this.channel) {
             options.channel = this.channel;
@@ -61,7 +59,7 @@
             this.$emit('error', 'no source specified');
           }
 
-          player = new window.Twitch.Player(this.playerId, options);
+          player = new window.Twitch.Player(this.$refs.player, options);
 
           player.addEventListener('ended', () => (this.$emit('ended')));
 
@@ -101,10 +99,10 @@
         return player.getPlaybackStats();
       },
       getQuality() { // Returns the current quality of video playback.
-        return player.getQualitity();
+        return player.getQuality();
       },
       isPaused() { // Returns true if the video is paused; otherwise, false. Buffering or seeking is considered playing.
-        return player.isPause();
+        return player.isPaused();
       },
       hasEnded() { // Returns true if the live stream or VOD has ended; otherwise, false.
         return player.getEnded();
@@ -120,6 +118,12 @@
       },
       unmute() { // Unmutes the player.
         player.setMuted(false);
+      },
+      checkChannel() {
+        return this.channel === player.getChannel();
+      },
+      checkVideo() {
+        return this.video = player.getVideo();
       },
     },
     watch: {
