@@ -38,7 +38,7 @@
       video: String,
     },
     beforeCreate() {
-      Vue.loadScript('//player.twitch.tv/js/embed/v1.js')
+      Vue.loadScript('https://player.twitch.tv/js/embed/v1.js')
         .then(() => {
           const options = {
             width: this.width,
